@@ -18,17 +18,19 @@
 <div id="theMap" style="width: 600px; height: 400px;"></div>
 <script>
 var theMap = L.map('theMap').setView([38.4778, -122.7441], 13);
+
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(theMap);
-function addDataToMap(data, map) {
-    var dataLayer = L.geoJson(data);
-    dataLayer.addTo(map);
-}
-$.getJSON("geojson/viirs_iband_fire_last7_2017_282_conus.geojson", function(data) { addDataToMap(data, map); });
-// L.geoJson function is used to parse geojson file and load on to map
-L.geoJson(data).addTo(theMap);
+
+
+var url = "https://raw.githubusercontent.com/nclarkjudd/norcalfires/master/www/geojson/viirs_iband_fire_last7_2017_282_conus.geojson?token=AB1LKI4F_kRkmb_emIqSHJ097BXx94BPks5Z5i8swA%3D%3D"
+
+$.getJSON(url, function(data) {
+	var dataLayer = L.geoJson(data);
+	dataLayer.addTo(theMap);
 });
+
 </script>
 </body>
 </html>
