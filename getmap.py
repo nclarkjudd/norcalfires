@@ -13,7 +13,7 @@ shapefile = 'shp/' + table + '.shp'
 
 def get_and_unzip():
     zipped = requests.get(url)
-    unzipped = zipfile.ZipFile(BytesIO(request.content))
+    unzipped = ZipFile(BytesIO(request.content))
     unzipped.extractall(path='shp')
 
 if __name__ == '__main__':
