@@ -1,1 +1,1 @@
-Map real-time data on fires in and around Sonoma County
+Provides data for https://norcalfires.github.io/ --- go there to see map of fire activity in and around Sonoma County.
