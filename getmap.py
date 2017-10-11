@@ -5,6 +5,7 @@ import requests
 from zipfile import ZipFile
 from datetime import datetime, timedelta
 from io import BytesIO
+import json
 
 now = datetime.today()
 day_of_year = datetime.strftime(now, "%j")
@@ -23,6 +24,8 @@ def get_and_unzip():
 def insert_rows(raw_shapefile):
     conn = psycopg2.connect("dbname=fires")
     cursor = conn.cursor()
+    cursor.execute("TRUNCATE firedata;")
+    conn.commit()
     shp = osgeo.ogr.Open(raw_shapefile)
     layer = shp.GetLayer()
     for i in range(layer.GetFeatureCount()):
@@ -41,7 +44,7 @@ def insert_rows(raw_shapefile):
         spix = feature.GetField("SPIX")
         src = feature.GetField("SRC")
         tpix = feature.GetField("TPIX")
-        cursor.execute("INSERT INTO fires VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ST_GeometryFromText(%s, 4269))",
+        cursor.execute("INSERT INTO firedata VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, ST_GeometryFromText(%s, 4269))",
                     (bt4temp, conf, date_time, fire, fire_id, frp, julian, lat, long, sat_src, src, spix, tpix, wkt))
     conn.commit()
     conn.close()
