@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 	<title>Santa Rosa Fire Page</title>
-
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
-  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
+<div style="width: 100%;">
+<h1 style="text-align: center;">Fire Activity</h1>
 
+<div id="theMap" style="width: 100%; height: 400px;"></div>
 
-</head>
-<div style="width: 600px;">
-<h1>Fire Activity</h1>
+<p>Each circle is the center of a 375-square-meter region where fire activity is likely to have occurred since Oct. 8,
+	according to an analysis of satellite imagery by the U.S. Forest Service.
+	<span style="font-weight: bold">SOURCE:</span>
+	<a href="https://fsapps.nwcg.gov/afm/data_viirs_iband/fireptdata/viirs_iband_fire_2017_conus_last7.htm">
+		USDA Forest Service Remote Sensing Applications Center, University of Maryland and NASA
+	</a>.
+</p>
 
-<div id="theMap" style="width: 600px; height: 400px;"></div>
+<p>
+	<a href="https://github.com/nclarkjudd/norcalfires">Improve this map</a>
+</p>
+</div>
+
 <script>
-var theMap = L.map('theMap').setView([38.4778, -122.7441], 11);
+var theMap = L.map('theMap').setView([38.4404, -122.7441], 9);
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(theMap);
 
 
-var url = "https://raw.githubusercontent.com/nclarkjudd/norcalfires/master/www/geojson/viirs_iband_fire_last7_2017_282_conus.geojson?token=AB1LKI4F_kRkmb_emIqSHJ097BXx94BPks5Z5i8swA%3D%3D"
+var url = "https://raw.githubusercontent.com/nclarkjudd/norcalfires/master/www/geojson/latest.geojson?token=AB1LKI4F_kRkmb_emIqSHJ097BXx94BPks5Z5i8swA%3D%3D"
 var geojsonMarkerOptions = {
-    radius: 4,
+    radius: 2,
     fillColor: "#ff1a1a",
     color: "#000",
     weight: 1,
@@ -47,8 +56,5 @@ $.getJSON(url, function(data) {
 });
 
 </script>
-<p>Each circle is the center of a 375-square-meter region where fire activity is likely, according to an analysis of satellite imagery by the U.S. Forest Service. <span style="font-weight: bold">SOURCE:</span> <a href="https://fsapps.nwcg.gov/afm/data_viirs_iband/fireptdata/viirs_iband_fire_2017_conus_last7.htm">USDA Forest Service Remote Sensing Applications Center, University of Maryland and NASA</a>.</p>
-<p><a href="https://github.com/nclarkjudd/norcalfires">Improve this map</a></p>
-</div>
 </body>
 </html>
