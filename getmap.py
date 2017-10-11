@@ -20,6 +20,8 @@ def get_and_unzip():
     unzipped.extractall(path='shp')
 
 def insert_rows(raw_shapefile):
+    conn = psycopg2.connect("dbname=fires")
+    cursor = conn.cursor()
     shp = osgeo.ogr.Open(raw_shapefile)
     layer = shp.GetLayer()
     for i in range(layer.GetFeatureCount()):
@@ -27,8 +29,8 @@ def insert_rows(raw_shapefile):
         wkt = feature.GetGeometryRef().ExportToWkt()
         bt4temp = feature.GetField("BT4TEMP")
         conf = feature.GetField("CONF")
-        datetime = datetime.strptime(feature.GetField("DATE") + " " + feature.GetField("GMT"),"%Y-%m-%d %H%M")
-        fire = feature.GetField("FIRE")
+        date_time = datetime.strptime(feature.GetField("DATE") + " " + feature.GetField("GMT"),"%Y-%m-%d %H%M")
+        fire = feature.GetField("FIRE_")
         fire_id = feature.GetField("FIRE_ID")
         frp = feature.GetField("FRP")
         julian = feature.GetField("JULIAN")
@@ -39,8 +41,8 @@ def insert_rows(raw_shapefile):
         src = feature.GetField("SRC")
         tpix = feature.GetField("TPIX")
         cursor.execute("INSERT INTO fires VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                    (bt4temp, conf, datetime, fire, fire_id, frp, julian, lat, long, sat_src, src, spix, tpix, wkt))
-    connection_commit()
+                    (bt4temp, conf, date_time, fire, fire_id, frp, julian, lat, long, sat_src, src, spix, tpix, wkt))
+    conn.commit()
 
 
 if __name__ == '__main__':
