@@ -29,7 +29,7 @@ def insert_rows(raw_shapefile):
         wkt = feature.GetGeometryRef().ExportToWkt()
         bt4temp = feature.GetField("BT4TEMP")
         conf = feature.GetField("CONF")
-        date_time = datetime.strptime(feature.GetField("DATE") + " " + feature.GetField("GMT"),"%Y-%m-%d %H%M")
+        date_time = datetime.strptime(feature.GetField("DATE") + " " + str(feature.GetField("GMT")),"%Y/%m/%d %H%M")
         fire = feature.GetField("FIRE_")
         fire_id = feature.GetField("FIRE_ID")
         frp = feature.GetField("FRP")
