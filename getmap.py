@@ -54,17 +54,17 @@ def get_activity(from_after):
     cursor = conn.cursor()
     makeview_str = "TRUNCATE active_fire_buffers;"\
                    "INSERT INTO active_fire_buffers SELECT fire, bt4temp, conf, date_time, frp, lat, lng, "\
-                   "ST_Buffer(ST_Transform(geom, 3311),187.5,'quad_segs=1') FROM firedata WHERE date_time > %s AND LAT < 42 AND LONG < -120 AND LONG > -124 AND LAT > 36;"
+                   "ST_Buffer(ST_Transform(geom, 3311),187.5,'quad_segs=1') FROM firedata WHERE date_time > %s AND lat < 42 AND lng < -120 AND lng > -124 AND lat > 36;"
     makeview_data = (from_after,)
     cursor.execute(makeview_str, makeview_data)
     conn.commit()
     get_geojson = "SELECT row_to_json(fc) "\
                   "FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features "\
                   "FROM (SELECT 'Feature' As type, "\
-                  "ST_AsGeoJSON(afb.new_geom)::json As geometry, "\
+                  "ST_AsGeoJSON(afb.geom)::json As geometry, "\
                   "row_to_json((SELECT l FROM (SELECT bt4temp, conf, date_time, frp) AS l "\
                   ")) As properties "\
-                  "FROM active_fire_buffers As afb   ) As f )  As fc"\
+                  "FROM active_fire_buffers As afb   ) As f )  As fc;"
     cursor.execute(get_geojson)
     geojson = cursor.fetchall()
     with open('www/geojson/latest_fire_buffers.geojson','w') as outf:
