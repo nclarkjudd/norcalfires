@@ -52,10 +52,9 @@ def insert_rows(raw_shapefile):
 def get_activity(from_after):
     conn = psycopg2.connect("dbname=fires")
     cursor = conn.cursor()
-    makeview_str = "CREATE OR REPLACE VIEW active_fire_buffers AS"\
-                   " SELECT ST_Buffer(ST_Transform(geom, 3311),187.5,'quad_segs=1') AS new_geom,"\
-                   " bt4temp, conf, date_time, frp FROM firedata"\
-                   " WHERE date_time > %s;"
+    makeview_str = "TRUNCATE active_fire_buffers;"\
+                   "INSERT INTO active_fire_buffers SELECT fire, bt4temp, conf, date_time, frp, lat, lng, "\
+                   "ST_Buffer(ST_Transform(geom, 3311),187.5,'quad_segs=1') FROM firedata WHERE date_time > %s AND LAT < 42 AND LONG < -120 AND LONG > -124 AND LAT > 36;"
     makeview_data = (from_after,)
     cursor.execute(makeview_str, makeview_data)
     conn.commit()
@@ -65,7 +64,7 @@ def get_activity(from_after):
                   "ST_AsGeoJSON(afb.new_geom)::json As geometry, "\
                   "row_to_json((SELECT l FROM (SELECT bt4temp, conf, date_time, frp) AS l "\
                   ")) As properties "\
-                  "FROM active_fire_buffers As afb   ) As f )  As fc;"
+                  "FROM active_fire_buffers As afb   ) As f )  As fc"\
     cursor.execute(get_geojson)
     geojson = cursor.fetchall()
     with open('www/geojson/latest_fire_buffers.geojson','w') as outf:
