@@ -40,7 +40,7 @@ def insert_rows(raw_shapefile):
         spix = feature.GetField("SPIX")
         src = feature.GetField("SRC")
         tpix = feature.GetField("TPIX")
-        cursor.execute("INSERT INTO fires VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        cursor.execute("INSERT INTO firedata VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     (bt4temp, conf, date_time, fire, fire_id, frp, julian, lat, long, sat_src, src, spix, tpix, wkt))
     conn.commit()
 
