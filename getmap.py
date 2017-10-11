@@ -5,6 +5,7 @@ import requests
 from zipfile import ZipFile
 from datetime import datetime, timedelta
 from io import BytesIO
+import json
 
 now = datetime.today()
 day_of_year = datetime.strftime(now, "%j")
@@ -58,8 +59,8 @@ def get_activity(from_after):
     makeview_data = (from_after,)
     cursor.execute(makeview_str, makeview_data)
     conn.commit()
-    get_geojson = "SELECT row_to_json(fc)"\
-                  "FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features"\
+    get_geojson = "SELECT row_to_json(fc) "\
+                  "FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features "\
                   "FROM (SELECT 'Feature' As type, "\
                   "ST_AsGeoJSON(afb.new_geom)::json As geometry, "\
                   "row_to_json((SELECT l FROM (SELECT bt4temp, conf, date_time, frp) AS l "\
